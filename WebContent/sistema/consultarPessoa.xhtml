@@ -1,0 +1,68 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+
+
+	<h:form style="margin:auto;margin-left:2%;" id="form-consulta">
+
+		<p:commandButton value="Consultar" id="commandButton-consultar"
+			icon="ui-icon-search" actionListener="#{pessoaController.consultar}"
+			update="dataTable-registros" />
+
+		<p:dataTable id="dataTable-registros" var="pessoa" 
+			value="#{pessoaController.pessoas}" rows="15" paginator="true" scrollable="true" scrollHeight="150"
+			paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+			rowsPerPageTemplate="5,10,15" style="width:98%;margin-top:5%;">
+
+			<f:facet name="header">
+					        Lista de Pessoas
+					    </f:facet>
+
+			<p:column headerText="Código" width="50">
+				<h:outputText value="#{pessoa.codigo}" />
+			</p:column>
+
+			<p:column headerText="Nome">
+				<h:outputText value="#{pessoa.nome}" />
+			</p:column>
+
+			<p:column headerText="Sexo">
+				<h:outputText
+					value="#{pessoa.sexo == 'M' ? 'Masculino' : 'Feminino'}" />
+			</p:column>
+
+			<p:column headerText="Cadastro">
+				<h:outputText value="#{pessoa.dataCadastro}">
+					<f:converter converterId="localDateTimeFacesConverter" />
+				</h:outputText>
+			</p:column>
+
+			<p:column headerText="Ações"  width="100">
+
+				<p:commandButton icon="ui-icon-pencil" title="Editar"
+					ajax="true" actionListener="#{pessoaController.editar(pessoa)}"
+					oncomplete="PF('dialog-modal-editar').show();"
+					update="dialog-modal-editar" />
+
+				<p:commandButton icon="ui-icon-trash" title="Excluir"
+					ajax="true"
+					actionListener="#{pessoaController.excluir(pessoa)}"
+					update="dataTable-registros" />
+					
+				<p:commandButton icon="ui-icon-clipboard" title="Visualizar"
+					oncomplete="PF('dialog-modal-visual').show();"
+					update="dialog-modal-visual" >
+					<f:setPropertyActionListener value="#{pessoa}" target="#{pessoaController.pessoa}" />
+				</p:commandButton>
+
+			</p:column>
+
+		</p:dataTable>
+
+	</h:form>
+
+
+</ui:composition>
